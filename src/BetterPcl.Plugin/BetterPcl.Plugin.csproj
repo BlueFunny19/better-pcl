@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    netstandard2.0: the only framework both PCL (CLR 4) and PCL-CE (CoreCLR) can load.
+    Harmony is never referenced; patches are only declared and PCL-Harmony applies them.
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>BetterPcl</AssemblyName>
+    <RootNamespace>BetterPcl</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <Deterministic>true</Deterministic>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Where the PCL-Harmony contract assembly can be found at build time. -->
+    <PclHarmonyContract Condition="'$(PclHarmonyContract)' == ''">$(MSBuildThisFileDirectory)..\..\reference\PCL-Harmony\src\contract\bin\Release\PclHarmony.Contract.dll</PclHarmonyContract>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Private=false: the launcher already provides the contract, we never ship our own copy. -->
+    <Reference Include="PclHarmony.Contract">
+      <HintPath>$(PclHarmonyContract)</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
